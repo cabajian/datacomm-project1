@@ -5,9 +5,7 @@ public class MyClient
 {
 	public static void main(String [] args)
 	{
-		try{
-
-
+		try {
 			Socket s = new Socket( "localhost", 16789);
 			InputStream in = s.getInputStream();
 			OutputStream out = s.getOutputStream();
@@ -23,8 +21,7 @@ public class MyClient
 			pout.close();
 			s.close();
 		}
-		catch(IOException ioe)
-		{
+		catch(IOException ioe) {
 			System.out.println("IO error");
 			ioe.printStackTrace();
 		}
