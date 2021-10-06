@@ -6,7 +6,8 @@ public class MyClient
 	public static void main(String [] args)
 	{
 		try{
-			
+
+
 			Socket s = new Socket( "localhost", 16789);
 			InputStream in = s.getInputStream();
 			OutputStream out = s.getOutputStream();
