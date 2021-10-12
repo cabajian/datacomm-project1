@@ -11,11 +11,12 @@ public class MyMultiThreadedServer {
 
     public MyMultiThreadedServer() {
         ServerSocket ss = null;
+        int SERVER_PORT = 16789;
 
         try {
-            ss = new ServerSocket(16789);
+            ss = new ServerSocket(SERVER_PORT);
             Socket cs = null;
-            System.out.println("Server started");
+            System.out.println("Server started at " + SERVER_PORT);
             while (true) {
                 cs = ss.accept(); // wait for connection
                 ThreadServer ths = new ThreadServer(cs);
