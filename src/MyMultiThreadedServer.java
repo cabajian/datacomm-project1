@@ -7,7 +7,7 @@ public class MyMultiThreadedServer {
         new MyMultiThreadedServer();
     }
 
-    ArrayList<String[]> studentGradeArray = new ArrayList<>();
+    private ArrayList<String[]> studentGradeArray = new ArrayList<>();
 
     public MyMultiThreadedServer() {
         ServerSocket ss = null;
