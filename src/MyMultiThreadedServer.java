@@ -2,8 +2,8 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 
-public class MyMultiThreadedServer{
-    public static void main(String [] args) {
+public class MyMultiThreadedServer {
+    public static void main(String[] args) {
         new MyMultiThreadedServer();
     }
 
@@ -15,14 +15,15 @@ public class MyMultiThreadedServer{
         try {
             ss = new ServerSocket(16789);
             Socket cs = null;
-            while(true){
+            System.out.println("Server started");
+            while (true) {
                 cs = ss.accept(); // wait for connection
-                ThreadServer ths = new ThreadServer( cs );
+                ThreadServer ths = new ThreadServer(cs);
                 ths.start();
             } // end while
-        } catch( BindException be ) {
+        } catch (BindException be) {
             System.out.println("Server already running on this computer, stopping.");
-        } catch( IOException ioe ) {
+        } catch (IOException ioe) {
             System.out.println("IO Error");
             ioe.printStackTrace();
         }
@@ -34,12 +35,22 @@ public class MyMultiThreadedServer{
         entry[0] = name;
         entry[1] = String.valueOf(grade);
         studentGradeArray.add(entry);
+        System.out.println("Entry: " + name + ": " + grade + " added to Student Grade List");
+    }
+
+    public synchronized boolean isInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     class ThreadServer extends Thread { // member inner class
         Socket cs;
 
-        public ThreadServer( Socket cs ) {
+        public ThreadServer(Socket cs) {
             this.cs = cs;
         }
 
@@ -48,29 +59,30 @@ public class MyMultiThreadedServer{
             PrintWriter opw;
             String clientMsg;
             try {
-                br = new BufferedReader(
-                        new InputStreamReader(
-                            cs.getInputStream()));
-                opw = new PrintWriter(
-                        new OutputStreamWriter(
-                            cs.getOutputStream()));
+                br = new BufferedReader(new InputStreamReader(cs.getInputStream()));
+                opw = new PrintWriter(new OutputStreamWriter(cs.getOutputStream()));
 
                 clientMsg = br.readLine(); // from client
                 String[] splitMsg = clientMsg.split(",");
                 if (splitMsg.length != 4) {
-                    clientMsg = "Invalid format!";
+                    clientMsg = "Invalid client format length";
                 } else {
-                    String name = splitMsg[0];
-                    double avg = (Double.parseDouble(splitMsg[1]) + Double.parseDouble(splitMsg[2]) + Double.parseDouble(splitMsg[3]))/3.0;
-                    addStudentGrade(name, avg);
-                    clientMsg = name + "," + String.valueOf(avg);
+                    try {
+                        String name = splitMsg[0];
+                        double avg = (Double.parseDouble(splitMsg[1]) + Double.parseDouble(splitMsg[2])
+                                + Double.parseDouble(splitMsg[3])) / 3.0;
+                        addStudentGrade(name, avg);
+                        clientMsg = name + "," + String.valueOf(avg);
+                    } catch (NumberFormatException n) {
+                        clientMsg = "Invalid format found in the client arguments";
+                    }
                 }
-                opw.println(clientMsg);	// to client
+                opw.println(clientMsg); // to client
                 opw.flush();
-            } catch( IOException e ) {
+            } catch (IOException e) {
                 System.out.println("Inside catch");
                 e.printStackTrace();
             }
         } // end while
-     } // end class ThreadServer
+    } // end class ThreadServer
 } // end MyMultiThreadedServer
