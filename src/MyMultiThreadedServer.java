@@ -49,7 +49,7 @@ public class MyMultiThreadedServer {
      * Adds a student name and average grade to the list as a String[] entry.
      * This function is thread-safe and allows for concurrent execution calls.
      */
-    public synchronized void addStudentGrade(String name, double grade) {
+    private synchronized void addStudentGrade(String name, double grade) {
         // Create the string array entry.
         String[] entry = new String[2];
         entry[0] = name;
